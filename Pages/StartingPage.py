@@ -36,7 +36,7 @@ class SearchForTnForm(tk.Frame):
 
         # loading indicator
         loading_frame = tk.Frame(frame1)
-        loading_frame.pack(pady=5, side=tk.TOP)
+        loading_frame.pack(side=tk.TOP)
         self.loadingBar = ttk.Progressbar(frame1, orient='horizontal', length=200)
 
         # result frame
@@ -47,7 +47,7 @@ class SearchForTnForm(tk.Frame):
         # trn input
         self.trn = tk.StringVar()
         trn_input = tk.Entry(self.frame2, textvariable=self.trn, font='Arial 30', justify='right')
-        trn_input.pack(pady=20)
+        trn_input.pack(pady=15)
         # label
         nn_label = tk.Label(self.frame2, text=arabic('الرقم الوطني'), font='Arial 25')
         nn_label.pack()
@@ -55,18 +55,25 @@ class SearchForTnForm(tk.Frame):
         # nn input
         self.nn = tk.StringVar()
         nn_input = tk.Entry(self.frame2, textvariable=self.nn, font='Arial 30', justify='right')
-        nn_input.pack(pady=20)
+        nn_input.pack(pady=15)
+
+
 
         # change nn button
         nn_search = tk.Button(self.frame2, text=arabic('نغيير الرقم الوطني'), font='Arial 20',
                               command=self.search_in_nn,
                               bg='#97c666',
                               fg='#fff')
-        nn_search.pack(pady=10)
+        nn_search.pack()
+
+        # error frame
+        self.nn_error_value = tk.StringVar()
+        nn_error_label = tk.Label(self.frame2, textvariable=self.nn_error_value, fg='#aa2a2a', font=' Arial 25')
+        nn_error_label.pack(pady=15)
 
         # label
         name_frame = tk.Frame(self.frame2)
-        name_frame.pack(pady=5)
+        name_frame.pack()
         self.name = tk.StringVar()
         name_label = tk.Label(name_frame, text=arabic('السائق :'), font='Arial 25')
         name_label.pack(side=tk.RIGHT, padx=3)
@@ -84,7 +91,7 @@ class SearchForTnForm(tk.Frame):
 
         # label
         dest_frame = tk.Frame(self.frame2)
-        dest_frame.pack(pady=5)
+        dest_frame.pack()
         self.dest = tk.StringVar()
         dest_label = tk.Label(dest_frame, text=arabic('الوجهة :'), font='Arial 25')
         dest_label.pack(side=tk.RIGHT, padx=3)
@@ -106,6 +113,7 @@ class SearchForTnForm(tk.Frame):
                 self.frame2.pack_forget()
             else:
                 self.error_value.set('')
+                self.nn_error_value.set('')
                 self.trn.set(result['trn'])
                 self.nn.set(result['driver_nn'])
                 self.cargo.set(arabic(result["cargo_name"]))
@@ -129,17 +137,17 @@ class SearchForTnForm(tk.Frame):
             # if there is error
             self.loadingBar.pack_forget()
             if not result:
-                self.error_value.set(arabic('الرقم الوطني غير صحيح'))
+                self.nn_error_value.set(arabic('الرقم الوطني غير صحيح'))
             else:
-                self.error_value.set('')
+                self.nn_error_value.set('')
                 self.name.set(arabic(result))
         except (ValueError, SyntaxError):
-            self.error_value.set(arabic('الرجاء ادخال رقم وطني صحيح'))
+            self.nn_error_value.set(arabic('الرجاء ادخال رقم وطني صحيح'))
             self.loadingBar.pack_forget()
 
     def loading(self):
         self.loadingBar.pack()
-        self.loadingBar.start()
+        self.loadingBar.start(interval=11)
 
     def search_in_tn(self):
         x0 = threading.Thread(target=self.loading)
