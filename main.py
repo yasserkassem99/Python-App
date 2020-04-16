@@ -1,8 +1,7 @@
 import tkinter as tk
 from Pages.StartingPage import SearchForTnForm
+from Pages.Message import Message
 
-
-# from Pages.scratch import Scratch
 
 
 class MainApp(tk.Tk):
@@ -13,19 +12,19 @@ class MainApp(tk.Tk):
         # tk.Tk.attributes(self, '-fullscreen', True)
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True, padx=10, pady=10, )
-        container.grid_rowconfigure(0, weight=1,minsize=1000)
-        container.grid_columnconfigure(0, weight=1,minsize=1000)
+        container.grid_rowconfigure(0, weight=1, )
+        container.grid_columnconfigure(0, weight=1,)
 
         '''
         here is the pages of our App
         '''
         self.frames = {}
-        for page in (SearchForTnForm,):
+        for i,page in enumerate((SearchForTnForm, Message)):
             frame = page(container, self)
             frame.grid(row=0, column=0, sticky="nsew")
-            self.frames[page] = frame
+            self.frames[f'{i}'] = frame
 
-        self.show_frame(SearchForTnForm)
+        self.show_frame('0')
 
     # to show pages (routing)
     def show_frame(self, cont):
